@@ -1,5 +1,7 @@
 #include<iostream>
 #include<cmath>
+#include<ctime>
+#include<cstdlib>
 
 using namespace std;
 
@@ -36,7 +38,7 @@ class Sudoku{
 		}
 
 	}
-	void printMap(int a[]){
+	void printOut(int a[]){
 	   cout <<'\n';
 	   for(int i=0;i<mapSize;i++){
 		   if((i+1)%9==0)
@@ -70,7 +72,7 @@ class Sudoku{
 	   map[70] = 1;
 	   map[73] = 9;
 	   map[78] = 4;
-	   printMap(map);  
+	   printOut(map);  
 	
 	}
 	int Section(int n){
@@ -220,7 +222,7 @@ class Sudoku{
 		}	
 		
 		for(int j=1;j<=9;j++){
-			
+			if(ansType==2)			
 			if(checkRepeat(n,j))
 				continue;
 			checkRow[n/9][j] = 1;
@@ -229,6 +231,8 @@ class Sudoku{
 		
 			map[n] = j;
 			backtrack(n+1);
+			if(ansType==2)
+				break;//遇到多組解時往回走避免浪費時間
 			map[n] = 0;
 			
 			checkRow[n/9][j] = 0;
@@ -243,7 +247,7 @@ class Sudoku{
 		backtrack(0);
 		if(ansType==1){
 			cout <<'1'<<'\n';
-			printMap(ans);
+			printOut(ans);
 		}
 		else if(ansType==2)
 			cout <<"2"<<'\n';
@@ -255,7 +259,19 @@ class Sudoku{
 		for(int i=0;i<mapSize;i++)
 			transMap[i] = map[i];
 	}
-
+	void transform(){
+		readIn();
+		change();
+		printOut(transMap);
+	}
+	void change(){
+		srand(time(NULL));
+		changeNum(rand()%9+1,rand()%9+1);
+		changeRow(rand()%3,rand()%3);
+		changeCol(rand()%3,rand()%3);
+		rotate(rand()%101);
+		flip(rand()%2);
+	}
 	void changeNum(int a,int b){
 		cpyMap();
 		for(int i=0;i<mapSize;i++){
@@ -271,24 +287,20 @@ class Sudoku{
 		cpyMap();
 		if(abs(a-b) == 2){
 			for(int i=0;i<27;i++)	
-				swap(transMap[i],transMap[54+i]);
-			
+				swap(transMap[i],transMap[54+i]);			
 			cout<<endl;
-			printMap(transMap);
 			return;
 		}
 		else if(a==0||b==0){
 			for(int i=0;i<27;i++)
 				swap(transMap[i],transMap[27+i]);
 			cout<<endl;
-			printMap(transMap);
 			return;
 		}
 		else{
 			for(int i=0;i<27;i++)
 				swap(transMap[27+i],transMap[54+i]);	
 			cout<<endl;
-			printMap(transMap);
 			return;
 		}
 	}
@@ -299,9 +311,7 @@ class Sudoku{
 				swap(transMap[i],transMap[i+6]);
 				swap(transMap[i+1],transMap[i+7]);
 				swap(transMap[i+2],transMap[i+8]);
-
 			}
-			printMap(transMap);
 			return;
 		}
 
@@ -310,9 +320,7 @@ class Sudoku{
 				swap(transMap[i],transMap[i+3]);
 				swap(transMap[i+1],transMap[i+4]);
 				swap(transMap[i+2],transMap[i+5]);
-
 			}
-			printMap(transMap);
 			return;
 		}
 		else{
@@ -320,9 +328,7 @@ class Sudoku{
 				swap(transMap[i],transMap[i+3]);
 				swap(transMap[i+1],transMap[i+4]);
 				swap(transMap[i+2],transMap[i+5]);
-
 			}
-			printMap(transMap);
 			return;
 		}
 
@@ -333,12 +339,10 @@ class Sudoku{
 			for(int k=0;k<mapSize;k++)			
 				keepMap[k]=transMap[k];
 			for(int j=0;j<mapSize;j++){
-			
 				if(j/9==0)
 					transMap[(j+1)*9-1]=keepMap[j];
 				else	
 					transMap[(j-(9*(j/9)-1))*9-((j/9)+1)]=keepMap[j];
-
 			}
 		}
 	}
@@ -356,7 +360,6 @@ class Sudoku{
 					swap(transMap[(9*j)+i],transMap[9*j+(8-i)]);//0和8行互換,1和7互換..
 			}
 		}
-
 	}
 
 	static const int mapSize = 81;
