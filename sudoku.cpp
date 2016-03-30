@@ -202,6 +202,8 @@ class Sudoku{
 	}
 	
 	void backtrack(int n){
+		while(n<81 && map[n]!=0)
+			n++;//如果此格已經有數字了(不是零)直接換找下個數字
 
 		if(n == mapSize){
 			if(ansType == 0){
@@ -214,8 +216,6 @@ class Sudoku{
 			return;
 		}
 
-		while(n<81 && map[n]!=0)
-			n++;//如果此格已經有數字了(不是零)直接換找下個數字
 		if(n == mapSize){
 			backtrack(n);
 			return;
