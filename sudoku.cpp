@@ -14,8 +14,10 @@ class Sudoku{
 	}
 
 	void iniMap(){
-	   for(int i=0;i<mapSize;i++)
+	   for(int i=0;i<mapSize;i++){
 		  map[i] = 0;
+		  keepMap[i]=0;
+	   }  
 	}
 		
 	void setVariable(){
@@ -265,58 +267,38 @@ class Sudoku{
 		}
 	}
 	void changeRow(int a,int b){
-		int temp = 0;
+
 		cpyMap();
 		if(abs(a-b) == 2){
-			for(int i=0;i<27;i++){
-				temp = transMap[i];
-				transMap[i] = transMap[54+i];
-				transMap[54+i] = temp;
-	
-			}
+			for(int i=0;i<27;i++)	
+				swap(transMap[i],transMap[54+i]);
+			
 			cout<<endl;
 			printMap(transMap);
 			return;
 		}
 		else if(a==0||b==0){
-			for(int i=0;i<27;i++){
-				temp = transMap[i];
-				transMap[i] = transMap[27+i];
-				transMap[27+i] = temp;
-
-			}			
+			for(int i=0;i<27;i++)
+				swap(transMap[i],transMap[27+i]);
 			cout<<endl;
 			printMap(transMap);
 			return;
 		}
 		else{
-			for(int i=0;i<27;i++){
-				temp = transMap[27+i];
-				transMap[27+i] = transMap[54+i];
-				transMap[54+i] = temp;
-
-			}			
+			for(int i=0;i<27;i++)
+				swap(transMap[27+i],transMap[54+i]);	
 			cout<<endl;
 			printMap(transMap);
 			return;
 		}
 	}
 	void changeCol(int a,int b){
-		int temp = 0;
-		int temp2 = 0;
-		int temp3 = 0;		
 		cpyMap();
 		if(abs(a-b)==2){
 			for(int i=0;i<=72;i=i+9){
-				temp = transMap[i];
-				transMap[i] = transMap[i+6];
-				transMap[i+6] = temp;
-				temp2 = transMap[i+1];
-				transMap[i+1] = transMap[i+7];
-				transMap[i+7] = temp2;
-				temp3 = transMap[i+2];
-				transMap[i+2] = transMap[i+8];
-				transMap[i+8] = temp3;
+				swap(transMap[i],transMap[i+6]);
+				swap(transMap[i+1],transMap[i+7]);
+				swap(transMap[i+2],transMap[i+8]);
 
 			}
 			printMap(transMap);
@@ -325,15 +307,9 @@ class Sudoku{
 
 		else if(a==0||b==0){
 			for(int i=0;i<=72;i=i+9){
-				temp = transMap[i];
-				transMap[i] = transMap[i+3];
-				transMap[i+3] = temp;
-				temp2 = transMap[i+1];
-				transMap[i+1] = transMap[i+4];
-				transMap[i+4] = temp2;
-				temp3 = transMap[i+2];
-				transMap[i+2] = transMap[i+5];
-				transMap[i+5] = temp3;
+				swap(transMap[i],transMap[i+3]);
+				swap(transMap[i+1],transMap[i+4]);
+				swap(transMap[i+2],transMap[i+5]);
 
 			}
 			printMap(transMap);
@@ -341,15 +317,9 @@ class Sudoku{
 		}
 		else{
 			for(int i=3;i<=75;i=i+9){
-				temp = transMap[i];
-				transMap[i] = transMap[i+3];
-				transMap[i+3] = temp;
-				temp2 = transMap[i+1];
-				transMap[i+1] = transMap[i+4];
-				transMap[i+4] = temp2;
-				temp3 = transMap[i+2];
-				transMap[i+2] = transMap[i+5];
-				transMap[i+5] = temp3;
+				swap(transMap[i],transMap[i+3]);
+				swap(transMap[i+1],transMap[i+4]);
+				swap(transMap[i+2],transMap[i+5]);
 
 			}
 			printMap(transMap);
@@ -357,20 +327,35 @@ class Sudoku{
 		}
 
 	}
-	void rotate(){
+	void rotate(int n){
+		cpyMap();			
+		for(int i=0;i<n;i++){
+			for(int k=0;k<mapSize;k++)			
+				keepMap[k]=transMap[k];
+			for(int j=0;j<mapSize;j++){
+			
+				if(j/9==0)
+					transMap[(j+1)*9-1]=keepMap[j];
+				else	
+					transMap[(j-(9*(j/9)-1))*9-((j/9)+1)]=keepMap[j];
 
-
-
+			}
+		}
 	}
 	void flip(int n){
-		if(n==0){
-
-
-
+		cpyMap();
+		if(n==1){
+			for(int i=0;i<=3;i++){//中間(第4列)不用交換
+				for(int j=0;j<9;j++)
+					swap(transMap[(9*i)+j],transMap[9*(8-i)+j]);//第0~8列,0和8互換,1和7互換,2和6互換....	
+			}
 		}
-
-
-
+		else if(n==0){
+			for(int i=0;i<=3;i++){
+				for(int j=0;j<9;j++)
+					swap(transMap[(9*j)+i],transMap[9*j+(8-i)]);//0和8行互換,1和7互換..
+			}
+		}
 
 	}
 
@@ -386,12 +371,12 @@ class Sudoku{
 	int checkSection[9][10];//
 	int ansType;//答案是哪種
 	int rowPart[81];
-
+	int keepMap[81];
 };
 int main(){
 	Sudoku s1;	
 	s1.giveQuestion();
-	s1.changeCol(0,2);
+	s1.rotate(3);
 	
 	return 0;
 
