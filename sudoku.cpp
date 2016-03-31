@@ -1,28 +1,20 @@
-#include<iostream>
-#include<cmath>
-#include<ctime>
-#include<cstdlib>
-
-using namespace std;
-
-class Sudoku{
-
-   public:	
-	Sudoku(){
+#include"sudoku.h"
+   Sudoku::Sudoku(){
 	   
 	   iniMap();  
 	   setVariable();
 	   
 	}
 
-	void iniMap(){
+	void Sudoku::iniMap(){
 	   for(int i=0;i<mapSize;i++){
 		  map[i] = 0;
 		  keepMap[i]=0;
+		  ans[i]=0;
 	   }  
 	}
 		
-	void setVariable(){
+	void Sudoku::setVariable(){
 
 		ansNum = 0;
 		ansType = 0;//答案是哪種
@@ -38,7 +30,7 @@ class Sudoku{
 		}
 
 	}
-	void printOut(int a[]){
+	void Sudoku::printOut(int a[]){
 	   cout <<'\n';
 	   for(int i=0;i<mapSize;i++){
 		   if((i+1)%9==0)
@@ -49,7 +41,7 @@ class Sudoku{
 	}
 
 
-	void giveQuestion(){
+	void Sudoku::giveQuestion(){
 	   iniMap();
 	   map[0] = 8;
 	   map[11] = 3;
@@ -75,7 +67,7 @@ class Sudoku{
 	   printOut(map);  
 	
 	}
-	int Section(int n){
+	int Sudoku::Section(int n){
 		int a;
 		switch(n){
 		case 0:
@@ -183,7 +175,7 @@ class Sudoku{
 	}
 
 
-	void readIn(){
+	void Sudoku::readIn(){
 		iniMap();
 		for(int i=0;i < mapSize;i++)
 		cin >> map[i];
@@ -194,14 +186,13 @@ class Sudoku{
 				checkSection[Section(i)][map[i]] = 1;
 			}
 		}	
-
 	}
-	int  checkRepeat(int n,int j){ //檢查是否重複，重複回傳1
+	int  Sudoku::checkRepeat(int n,int j){ //檢查是否重複，重複回傳1
 		if(checkRow[n/9][j]!=0||checkCol[n%9][j]!=0||checkSection[Section(n)][j]!=0)
 			return 1;
 	}
 	
-	void backtrack(int n){
+	void Sudoku::backtrack(int n){
 		while(n<81 && map[n]!=0)
 			n++;//如果此格已經有數字了(不是零)直接換找下個數字
 
@@ -222,7 +213,6 @@ class Sudoku{
 		}	
 		
 		for(int j=1;j<=9;j++){
-			if(ansType==2)			
 			if(checkRepeat(n,j))
 				continue;
 			checkRow[n/9][j] = 1;
@@ -242,7 +232,7 @@ class Sudoku{
 		}
 
 	}
-	void solve(){
+	void Sudoku::solve(){
 
 		backtrack(0);
 		if(ansType==1){
@@ -251,20 +241,20 @@ class Sudoku{
 		}
 		else if(ansType==2)
 			cout <<"2"<<'\n';
-		else
+		else 
 			cout <<"No Solution"<<'\n';
 
 	}
-	void cpyMap(){
+	void Sudoku::cpyMap(){
 		for(int i=0;i<mapSize;i++)
 			transMap[i] = map[i];
 	}
-	void transform(){
+	void Sudoku::transform(){
 		readIn();
 		change();
 		printOut(transMap);
 	}
-	void change(){
+	void Sudoku::change(){
 		srand(time(NULL));
 		changeNum(rand()%9+1,rand()%9+1);
 		changeRow(rand()%3,rand()%3);
@@ -272,7 +262,7 @@ class Sudoku{
 		rotate(rand()%101);
 		flip(rand()%2);
 	}
-	void changeNum(int a,int b){
+	void Sudoku::changeNum(int a,int b){
 		cpyMap();
 		for(int i=0;i<mapSize;i++){
 			if(map[i]==a)
@@ -282,7 +272,7 @@ class Sudoku{
 
 		}
 	}
-	void changeRow(int a,int b){
+	void Sudoku::changeRow(int a,int b){
 
 		cpyMap();
 		if(abs(a-b) == 2){
@@ -304,7 +294,7 @@ class Sudoku{
 			return;
 		}
 	}
-	void changeCol(int a,int b){
+	void Sudoku::changeCol(int a,int b){
 		cpyMap();
 		if(abs(a-b)==2){
 			for(int i=0;i<=72;i=i+9){
@@ -333,7 +323,7 @@ class Sudoku{
 		}
 
 	}
-	void rotate(int n){
+	void Sudoku::rotate(int n){
 		cpyMap();			
 		for(int i=0;i<n;i++){
 			for(int k=0;k<mapSize;k++)			
@@ -346,7 +336,7 @@ class Sudoku{
 			}
 		}
 	}
-	void flip(int n){
+	void Sudoku::flip(int n){
 		cpyMap();
 		if(n==1){
 			for(int i=0;i<=3;i++){//中間(第4列)不用交換
@@ -361,26 +351,3 @@ class Sudoku{
 			}
 		}
 	}
-
-	static const int mapSize = 81;
-
-   private:
-	int transMap[mapSize];
-	int map[mapSize];
-	int ans[mapSize];
-	int ansNum;
-	int checkRow[9][10];
-	int checkCol[9][10];
-	int checkSection[9][10];//
-	int ansType;//答案是哪種
-	int rowPart[81];
-	int keepMap[81];
-};
-int main(){
-	Sudoku s1;	
-	s1.giveQuestion();
-	s1.rotate(3);
-	
-	return 0;
-
-}
