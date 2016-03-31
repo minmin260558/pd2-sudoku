@@ -1,4 +1,4 @@
-#include"sudoku.h"
+#include"Sudoku.h"
    Sudoku::Sudoku(){
 	   
 	   iniMap();  
@@ -203,7 +203,7 @@
 					ans[i] = map[i];
 			}	
 			else if(ansType == 1)
-				ansType == 2;//multi solution
+				ansType = 2;//multi solution
 			return;
 		}
 
