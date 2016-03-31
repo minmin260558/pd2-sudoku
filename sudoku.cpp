@@ -253,7 +253,7 @@
 		else if(ansType==2)
 			cout <<"2"<<'\n';
 		else 
-			cout <<"No Solution"<<'\n';
+			cout <<"0"<<'\n';
 
 	}
 	void Sudoku::cpyMap(){
