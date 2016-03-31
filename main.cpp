@@ -2,7 +2,6 @@
 
 int main(){
 	Sudoku ss;
-	ss.readIn();
-	ss.solve();
+	ss.transform();
 	return 0;
 }

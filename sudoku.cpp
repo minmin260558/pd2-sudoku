@@ -261,6 +261,7 @@
 	}
 	void Sudoku::transform(){
 		readIn();
+		cpyMap();
 		change();
 		printOut(transMap);
 	}
@@ -273,7 +274,7 @@
 		flip(rand()%2);
 	}
 	void Sudoku::changeNum(int a,int b){
-		cpyMap();
+
 		for(int i=0;i<mapSize;i++){
 			if(map[i]==a)
 				transMap[i] = b;
@@ -283,29 +284,25 @@
 		}
 	}
 	void Sudoku::changeRow(int a,int b){
-
-		cpyMap();
 		if(abs(a-b) == 2){
 			for(int i=0;i<27;i++)	
 				swap(transMap[i],transMap[54+i]);			
-			cout<<endl;
 			return;
 		}
+		else if(a==b)
+			return;
 		else if(a==0||b==0){
 			for(int i=0;i<27;i++)
 				swap(transMap[i],transMap[27+i]);
-			cout<<endl;
 			return;
 		}
 		else{
 			for(int i=0;i<27;i++)
 				swap(transMap[27+i],transMap[54+i]);	
-			cout<<endl;
 			return;
 		}
 	}
 	void Sudoku::changeCol(int a,int b){
-		cpyMap();
 		if(abs(a-b)==2){
 			for(int i=0;i<=72;i=i+9){
 				swap(transMap[i],transMap[i+6]);
@@ -314,7 +311,8 @@
 			}
 			return;
 		}
-
+		else if(a==b)
+			return;
 		else if(a==0||b==0){
 			for(int i=0;i<=72;i=i+9){
 				swap(transMap[i],transMap[i+3]);
@@ -334,7 +332,6 @@
 
 	}
 	void Sudoku::rotate(int n){
-		cpyMap();			
 		for(int i=0;i<n;i++){
 			for(int k=0;k<mapSize;k++)			
 				keepMap[k]=transMap[k];
@@ -347,7 +344,6 @@
 		}
 	}
 	void Sudoku::flip(int n){
-		cpyMap();
 		if(n==1){
 			for(int i=0;i<=3;i++){//中間(第4列)不用交換
 				for(int j=0;j<9;j++)
