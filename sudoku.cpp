@@ -255,15 +255,10 @@
 			cout <<"0"<<'\n';
 
 	}
-	void Sudoku::cpyMap(){
-		for(int i=0;i<mapSize;i++)
-			transMap[i] = map[i];
-	}
 	void Sudoku::transform(){
 		readIn();
-		cpyMap();
 		change();
-		printOut(transMap);
+		printOut(map);
 	}
 	void Sudoku::change(){
 		srand(time(NULL));
@@ -272,42 +267,44 @@
 		changeCol(rand()%3,rand()%3);
 		rotate(rand()%101);
 		flip(rand()%2);
+
+
 	}
 	void Sudoku::changeNum(int a,int b){
 
 		for(int i=0;i<mapSize;i++){
 			if(map[i]==a)
-				transMap[i] = b;
+				map[i] = b;
 			else if(map[i]==b)
-				transMap[i] = a;
+				map[i] = a;
 
 		}
 	}
 	void Sudoku::changeRow(int a,int b){
 		if(abs(a-b) == 2){
 			for(int i=0;i<27;i++)	
-				swap(transMap[i],transMap[54+i]);			
+				swap(map[i],map[54+i]);			
 			return;
 		}
 		else if(a==b)
 			return;
 		else if(a==0||b==0){
 			for(int i=0;i<27;i++)
-				swap(transMap[i],transMap[27+i]);
+				swap(map[i],map[27+i]);
 			return;
 		}
 		else{
 			for(int i=0;i<27;i++)
-				swap(transMap[27+i],transMap[54+i]);	
+				swap(map[27+i],map[54+i]);	
 			return;
 		}
 	}
 	void Sudoku::changeCol(int a,int b){
 		if(abs(a-b)==2){
 			for(int i=0;i<=72;i=i+9){
-				swap(transMap[i],transMap[i+6]);
-				swap(transMap[i+1],transMap[i+7]);
-				swap(transMap[i+2],transMap[i+8]);
+				swap(map[i],map[i+6]);
+				swap(map[i+1],map[i+7]);
+				swap(map[i+2],map[i+8]);
 			}
 			return;
 		}
@@ -315,17 +312,17 @@
 			return;
 		else if(a==0||b==0){
 			for(int i=0;i<=72;i=i+9){
-				swap(transMap[i],transMap[i+3]);
-				swap(transMap[i+1],transMap[i+4]);
-				swap(transMap[i+2],transMap[i+5]);
+				swap(map[i],map[i+3]);
+				swap(map[i+1],map[i+4]);
+				swap(map[i+2],map[i+5]);
 			}
 			return;
 		}
 		else{
 			for(int i=3;i<=75;i=i+9){
-				swap(transMap[i],transMap[i+3]);
-				swap(transMap[i+1],transMap[i+4]);
-				swap(transMap[i+2],transMap[i+5]);
+				swap(map[i],map[i+3]);
+				swap(map[i+1],map[i+4]);
+				swap(map[i+2],map[i+5]);
 			}
 			return;
 		}
@@ -334,12 +331,12 @@
 	void Sudoku::rotate(int n){
 		for(int i=0;i<n;i++){
 			for(int k=0;k<mapSize;k++)			
-				keepMap[k]=transMap[k];
+				keepMap[k]=map[k];
 			for(int j=0;j<mapSize;j++){
 				if(j/9==0)
-					transMap[(j+1)*9-1]=keepMap[j];
+					map[(j+1)*9-1]=keepMap[j];
 				else	
-					transMap[(j-(9*(j/9)-1))*9-((j/9)+1)]=keepMap[j];
+					map[(j-(9*(j/9)-1))*9-((j/9)+1)]=keepMap[j];
 			}
 		}
 	}
@@ -347,13 +344,13 @@
 		if(n==1){
 			for(int i=0;i<=3;i++){//中間(第4列)不用交換
 				for(int j=0;j<9;j++)
-					swap(transMap[(9*i)+j],transMap[9*(8-i)+j]);//第0~8列,0和8互換,1和7互換,2和6互換....	
+					swap(map[(9*i)+j],map[9*(8-i)+j]);//第0~8列,0和8互換,1和7互換,2和6互換....	
 			}
 		}
 		else if(n==0){
 			for(int i=0;i<=3;i++){
 				for(int j=0;j<9;j++)
-					swap(transMap[(9*j)+i],transMap[9*j+(8-i)]);//0和8行互換,1和7互換..
+					swap(map[(9*j)+i],map[9*j+(8-i)]);//0和8行互換,1和7互換..
 			}
 		}
 	}
