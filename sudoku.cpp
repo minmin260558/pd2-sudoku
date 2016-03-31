@@ -181,11 +181,16 @@
 		cin >> map[i];
 		for(int i=0;i<mapSize;i++){
 			if(map[i]!=0){
+				if(checkRow[(i/9)][map[i]]||checkCol[(i%9)][map[i]]||checkSection[Section(i)][map[i]]){
+					cout << "0" <<endl;
+					break;
+				}	
 				checkRow[(i/9)][map[i]] = 1;
 				checkCol[(i%9)][map[i]] = 1;
 				checkSection[Section(i)][map[i]] = 1;
 			}
-		}	
+		}
+			
 	}
 	int  Sudoku::checkRepeat(int n,int j){ //檢查是否重複，重複回傳1
 		if(checkRow[n/9][j]!=0||checkCol[n%9][j]!=0||checkSection[Section(n)][j]!=0)
