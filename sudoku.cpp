@@ -182,9 +182,10 @@
 		for(int i=0;i<mapSize;i++){
 			if(map[i]!=0){
 				if(checkRow[(i/9)][map[i]]||checkCol[(i%9)][map[i]]||checkSection[Section(i)][map[i]]){
-					cout << "0" <<endl;
+					ansType = -1;
 					break;
 				}	
+
 				checkRow[(i/9)][map[i]] = 1;
 				checkCol[(i%9)][map[i]] = 1;
 				checkSection[Section(i)][map[i]] = 1;
@@ -239,7 +240,12 @@
 	}
 	void Sudoku::solve(){
 
+		if(ansType==-1){
+			cout<<'0'<<endl;
+			return;
+		}
 		backtrack(0);
+		
 		if(ansType==1){
 			cout <<'1'<<'\n';
 			printOut(ans);
