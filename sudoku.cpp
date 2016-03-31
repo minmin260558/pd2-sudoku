@@ -31,7 +31,6 @@
 
 	}
 	void Sudoku::printOut(int a[]){
-	   cout <<'\n';
 	   for(int i=0;i<mapSize;i++){
 		   if((i+1)%9==0)
 			  cout << a[i] << '\n';
