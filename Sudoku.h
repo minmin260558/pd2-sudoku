@@ -23,9 +23,12 @@ class Sudoku{
 		void cpyMap();
 		void change();
 		void printOut(int a[]);
+		int possible();
+		int pos(int i);
+		int checkErr();
 		static const int mapSize=81;
 	private:
-		int transMap[mapSize];
+		int done;		
 		int map[mapSize];
 		int ans[mapSize];
 		int ansNum;
