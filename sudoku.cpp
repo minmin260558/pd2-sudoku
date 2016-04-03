@@ -16,19 +16,15 @@
 		
 	void Sudoku::setVariable(){
 
-		ansNum = 0;
-		ansType = 0;//答案是哪種
-		done = 0;		
+		ansType = 0;//答案是哪種	
 		for(int i=0;i<9;i++){
 			for(int j=0;j<10;j++){
 
 				checkRow[i][j]=0;
 				checkCol[i][j]=0;
 				checkSection[i][j]=0;
-
 			}
 		}
-
 	}
 	void Sudoku::printOut(int a[]){
 	   for(int i=0;i<mapSize;i++){
@@ -187,10 +183,8 @@
 				checkRow[(i/9)][map[i]] = 1;
 				checkCol[(i%9)][map[i]] = 1;
 				checkSection[Section(i)][map[i]] = 1;				
-			}
-		
-		}
-			
+			}		
+		}			
 	}
 	int  Sudoku::checkRepeat(int n,int j){ //檢查是否重複，重複回傳1
 		if(checkRow[n/9][j]!=0||checkCol[n%9][j]!=0||checkSection[Section(n)][j]!=0)
@@ -270,9 +264,7 @@
 			checkSection[Section(n)][j] = 0;
 
 		}
-
 	}
-
 
 	void Sudoku::solve(){
 
