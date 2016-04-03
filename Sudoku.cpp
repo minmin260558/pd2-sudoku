@@ -282,7 +282,6 @@
 			cout <<"2"<<'\n';
 		else 
 			cout <<"0"<<'\n';
-
 	}
 	void Sudoku::transform(){
 		change();
