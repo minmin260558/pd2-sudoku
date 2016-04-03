@@ -18,25 +18,17 @@ class Sudoku{
 		void iniMap();
 		void setVariable();
 		int Section(int n);
-		int checkRepeat(int n,int j);
 		void backtrack(int n);
 		void cpyMap();
 		void change();
 		void printOut(int a[]);
-		int possible();
-		int pos(int i);
-		int checkErr();
 		static const int mapSize=81;
 	private:
-		int done;		
 		int map[mapSize];
 		int ans[mapSize];
-		int ansNum;
 		int checkRow[9][10];
 		int checkCol[9][10];
 		int checkSection[9][10];
 		int ansType;
 		int keepMap[81];
 };
-
-
