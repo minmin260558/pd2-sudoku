@@ -16,8 +16,9 @@
 		
 	void Sudoku::setVariable(){
 
+		ansNum = 0;
 		ansType = 0;//答案是哪種
-		
+		done = 0;		
 		for(int i=0;i<9;i++){
 			for(int j=0;j<10;j++){
 
@@ -182,23 +183,68 @@
 				if(checkRow[(i/9)][map[i]]||checkCol[(i%9)][map[i]]||checkSection[Section(i)][map[i]]){
 					ansType = -1;
 					break;
-				}	
-
+				}		
 				checkRow[(i/9)][map[i]] = 1;
 				checkCol[(i%9)][map[i]] = 1;
-				checkSection[Section(i)][map[i]] = 1;
+				checkSection[Section(i)][map[i]] = 1;				
 			}
+		
 		}
 			
 	}
-	
-	void Sudoku::backtrack(int n){
-		while(n<81 && map[n]!=0)
-			n++;//如果此格已經有數字了(不是零)直接換找下個數字
+	int  Sudoku::checkRepeat(int n,int j){ //檢查是否重複，重複回傳1
+		if(checkRow[n/9][j]!=0||checkCol[n%9][j]!=0||checkSection[Section(n)][j]!=0)
+			return 1;
+		return 0;
+	}
+	int Sudoku::possible(){//回傳盤面上最小可能
+		int a=0;
+		int b=0;
+		int c=0;
+		int count=0;
+		for(int j=0;j<mapSize;j++)//填完的話
+			if(map[j]!=0)
+				count++;
+		if(count==mapSize)
+			return mapSize;
+		
+		for(int i=0;i<mapSize;i++){//有沒填到的,計算哪格的可能性最小並回傳
+			a=0;
+			while(map[i]!=0&&i<mapSize)
+				i++;
+			if(i==mapSize)
+				return c;
+			for(int k=1;k<10;k++)
+				if(checkRepeat(i,k))
+					a++;
+			if(a>b){
+				b = a;
+				c = i;
+			}								
+		}
+		return c;
+	}
+	int Sudoku::pos(int a){
+		int count=0;
+		for(int i=1;i<=9;i++)
+			if(checkRepeat(a,i))
+				count++;
+		return (9-count);
 
+	}
+	int Sudoku::checkErr(){
+		for(int i=0;i<mapSize;i++)
+			if(map[i]==0&&(pos(i)<0||pos(i)==0))
+				return 1;
+		return 0;
+		
+	}	
+	void Sudoku::backtrack(int n){
+		if(checkErr())
+			return;	
 		if(n == mapSize){
 			if(ansType == 0){
-				ansType=1;//one solution
+				ansType = 1;//one solution
 				for(int i=0;i<mapSize;i++)
 					ans[i] = map[i];
 			}	
@@ -207,34 +253,34 @@
 			return;
 		}
 		
-		
 		for(int j=1;j<=9;j++){
-			if(checkRow[n/9][j]||checkCol[n%9][j]||checkSection[Section(n)][j])
+			if(checkRepeat(n,j))
 				continue;
 			checkRow[n/9][j] = 1;
 			checkCol[n%9][j] = 1;
 			checkSection[Section(n)][j] = 1;
 		
 			map[n] = j;
-			backtrack(n+1);
+			backtrack(possible());
 			if(ansType==2)
 				break;//遇到多組解時往回走避免浪費時間
-			map[n] = 0;
-			
+			map[n] = 0;	
 			checkRow[n/9][j] = 0;
 			checkCol[n%9][j] = 0;
-			checkSection[Section(n)][j] = 0;		
+			checkSection[Section(n)][j] = 0;
 
 		}
 
 	}
+
+
 	void Sudoku::solve(){
 
 		if(ansType==-1){
 			cout<<'0'<<endl;
 			return;
 		}
-		backtrack(0);
+		backtrack(possible());
 		
 		if(ansType==1){
 			cout <<'1'<<'\n';
